@@ -4,6 +4,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -15,7 +16,7 @@ beforeEach(async () => {
   await blogObject.save()
 })
 
-describe('get', () => {
+describe('getting blogs', () => {
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -36,7 +37,7 @@ describe('get', () => {
   })
 })
 
-describe('post', () => {
+describe('adding new blogs', () => {
   test('when a valid blog is added, blog count increases', async () => {
     await api
       .post('/api/blogs')
@@ -70,7 +71,7 @@ describe('post', () => {
 })
 
 
-describe('delete', () => {
+describe('deleting blogs', () => {
   test('when a blog is deleted, blog count decreases', async () => {
     await api
       .delete(`/api/blogs/${helper.initialBlogs[1]._id}`)
@@ -89,7 +90,7 @@ describe('delete', () => {
   })
 })
 
-describe('put', () => {
+describe('updating blogs', () => {
   test('the updated title of a blog is returned correctly', async () => {
     await api
       .put(`/api/blogs/${helper.initialBlogs[1]._id}`)
@@ -123,6 +124,74 @@ describe('put', () => {
     expect(likeCounts).toContain(25)
   })
 
+})
+
+
+
+
+
+describe('getting users', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+    let userObject = new User(helper.initialUsers[0])
+    await userObject.save()
+    userObject = new User(helper.initialUsers[1])
+    await userObject.save()
+    userObject = new User(helper.initialUsers[2])
+    await userObject.save()
+  })
+
+  test('users are returned as json', async () => {
+    await api
+      .get('/api/users')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('all the users are returned', async () => {
+    const response = await api.get('/api/users')
+    expect(response.body.length).toBe(helper.initialUsers.length)
+  })
+
+  test('usernames are returned correctly', async () => {
+    const response = await api.get('/api/users')
+    expect(response.body[0].username).toBe(helper.initialUsers[0].username)
+  })
+})
+
+
+describe('adding users', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+    let userObject = new User(helper.initialUsers[0])
+    await userObject.save()
+    userObject = new User(helper.initialUsers[1])
+    await userObject.save()
+    userObject = new User(helper.initialUsers[2])
+    await userObject.save()
+  })
+
+  test('creation succeeds with an unused username', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'uusitesti',
+      name: 'Uusi Testikäyttäjä',
+      password: 'salainen',
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd.length).toBe(usersAtStart.length + 1)
+
+    const usernames = usersAtEnd.map(u => u.username)
+    expect(usernames).toContain(newUser.username)
+  })
 })
 
 
