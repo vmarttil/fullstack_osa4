@@ -67,11 +67,28 @@ describe('post', () => {
     const response = await api.get(`/api/blogs/${helper.blogWithNoLikes._id}`)
     expect(response.body.likes).toBe(0)
   })
-
-
-
-
 })
+
+
+describe('delete', () => {
+  test('when a blog is deleted, blog count decreases', async () => {
+    await api
+      .delete(`/api/blogs/${helper.initialBlogs[1]._id}`)
+      .expect(204)
+    const blogsFinal = await helper.blogsInDb()
+    expect(blogsFinal.length).toBe(helper.initialBlogs.length - 1)
+  })
+
+  test('the title of the deleted blog is no longer found', async () => {
+    await api
+      .delete(`/api/blogs/${helper.initialBlogs[1]._id}`)
+      .expect(204)
+    const blogsFinal = await helper.blogsInDb()
+    const titles = blogsFinal.map((blog) => blog.title)
+    expect(titles).not.toContain(helper.initialBlogs[1].title)
+  })
+})
+
 
 
 
