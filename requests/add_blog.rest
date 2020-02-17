@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZtYXJ0dGlsIiwiaWQiOiI1ZTRhOTNlYzdhYmZjNzE5ZDAyNjU4YWUiLCJpYXQiOjE1ODE5NjM1MTh9.olEZ3DlWLNJBDsXd2Sq_EC-2jymFrWQYCaUsx5lMOgc
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZtYXJ0dGlsIiwiaWQiOiI1ZTRhOTNlYzdhYmZjNzE5ZDAyNjU4YWUiLCJpYXQiOjE1ODE5NjYxNDl9.lnfrMOoMNheWXrIy9jgYr9LNd-4xRqP1M3HqzP-BuzU
 
 {
-    "title": "First test blog while authorized",    
+    "title": "Another test blog while authorized",    
     "author": "Ville Marttila",
-    "url": "http://www.testaddress.com/blogauthorized",
-    "likes": 10
+    "url": "http://www.testaddress.com/blogauthorized2",
+    "likes": 3
 }
