@@ -89,8 +89,41 @@ describe('delete', () => {
   })
 })
 
+describe('put', () => {
+  test('the updated title of a blog is returned correctly', async () => {
+    await api
+      .put(`/api/blogs/${helper.initialBlogs[1]._id}`)
+      .send({ title: 'This title has been changed' })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    const blogsFinal = await helper.blogsInDb()
+    const titles = blogsFinal.map((blog) => blog.title)
+    expect(titles).toContain('This title has been changed')
+  })
 
+  test('the updated author of a blog is returned correctly', async () => {
+    await api
+      .put(`/api/blogs/${helper.initialBlogs[1]._id}`)
+      .send({ author: 'Changed Author' })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    const blogsFinal = await helper.blogsInDb()
+    const authors = blogsFinal.map((blog) => blog.author)
+    expect(authors).toContain('Changed Author')
+  })
 
+  test('the updated likes of a blog are returned correctly', async () => {
+    await api
+      .put(`/api/blogs/${helper.initialBlogs[1]._id}`)
+      .send({ likes: 25 })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    const blogsFinal = await helper.blogsInDb()
+    const likeCounts = blogsFinal.map((blog) => blog.likes)
+    expect(likeCounts).toContain(25)
+  })
+
+})
 
 
 
