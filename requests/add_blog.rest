@@ -5,5 +5,6 @@ content-type: application/json
     "title": "Fourth test blog",
     "author": "Ville Marttila",
     "url": "http://www.testaddress.com/blog5",
-    "likes": 8
+    "likes": 8,
+    "userId": "5e4a93ec7abfc719d02658ae"
 }
